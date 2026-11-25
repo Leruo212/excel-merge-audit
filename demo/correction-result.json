@@ -1,0 +1,32 @@
+{
+  "before": {
+    "inputRows": 125,
+    "acceptedRows": 112,
+    "duplicateRows": 3,
+    "reviewRows": 10,
+    "skippedRows": 43,
+    "acceptedAmountCents": 869100,
+    "parsedInputAmountCents": null,
+    "duplicateAmountCents": null,
+    "reviewAmountCents": null,
+    "unparseableAmounts": 2,
+    "adjustmentAmountCents": 0,
+    "acceptedWithoutOriginalAmountRows": 0,
+    "acceptedWithChangedCurrencyRows": 0
+  },
+  "after": {
+    "inputRows": 125,
+    "acceptedRows": 114,
+    "duplicateRows": 3,
+    "reviewRows": 8,
+    "skippedRows": 43,
+    "acceptedAmountCents": 884175,
+    "parsedInputAmountCents": null,
+    "duplicateAmountCents": null,
+    "reviewAmountCents": null,
+    "unparseableAmounts": 2,
+    "adjustmentAmountCents": 0,
+    "acceptedWithoutOriginalAmountRows": 0,
+    "acceptedWithChangedCurrencyRows": 0
+  }
+}

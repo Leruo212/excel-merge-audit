@@ -4,3 +4,4 @@ coverage/
 outputs/
 tmp/
 *.log
+*.inspect.ndjson

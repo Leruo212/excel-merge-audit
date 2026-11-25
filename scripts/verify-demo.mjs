@@ -1,0 +1,28 @@
+import fs from 'node:fs/promises';
+import assert from 'node:assert/strict';
+import path from 'node:path';
+import { loadSheets } from '../src/workbooks.mjs';
+import { mergeSheets } from '../src/core.mjs';
+
+const root = path.resolve(import.meta.dirname, '..');
+const expected = JSON.parse(await fs.readFile(path.join(root, 'demo/expected.json'), 'utf8'));
+const sheets = await loadSheets(path.join(root, 'demo/input'));
+const result = mergeSheets(sheets);
+assert.equal(new Set(sheets.map((sheet) => sheet.file)).size, expected.files);
+for (const key of ['inputRows', 'acceptedRows', 'duplicateRows', 'reviewRows', 'acceptedAmountCents']) assert.equal(result.summary[key], expected[key], key);
+assert.deepEqual(result.accepted.map((row) => `${row.values.order_id}|${row.values.line_id}`).sort(), expected.acceptedKeys);
+assert.equal(result.sources.length, result.accepted.length + result.review.length + result.duplicates.length + result.skipped.length);
+assert.equal(new Set(result.sources.map((row) => row.id)).size, result.sources.length);
+for (const audit of result.amountAudit || []) assert.equal(audit.parsedInputCents, audit.acceptedOriginalCents + audit.duplicateOriginalCents + audit.reviewOriginalCents, audit.currency);
+const saved = JSON.parse(await fs.readFile(path.join(root, 'demo/output/audit.json'), 'utf8'));
+assert.deepEqual(saved, result, '发布的演示记录必须等于当前核心重跑结果');
+const corrections = JSON.parse(await fs.readFile(path.join(root, 'demo/corrections.example.json'), 'utf8'));
+const fixed = mergeSheets(sheets, { corrections });
+assert.equal(fixed.summary.acceptedRows, 114);
+assert.equal(fixed.summary.reviewRows, 8);
+assert.equal(fixed.summary.duplicateRows, 3);
+assert.equal(fixed.summary.acceptedAmountCents, expected.acceptedAmountCents + 15075);
+const correctionSnapshot = JSON.parse(await fs.readFile(path.join(root, 'demo/correction-result.json'), 'utf8'));
+assert.deepEqual(correctionSnapshot, { before: result.summary, after: fixed.summary });
+console.log('十文件样例独立控制值、唯一键、逐行归属、分类金额及发布快照均通过。');
+console.log(JSON.stringify(result.summary, null, 2));
