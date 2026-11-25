@@ -1,0 +1,16 @@
+{
+  "name": "excel-merge-audit",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Merge inconsistent order spreadsheets with row provenance and reconciliation.",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "test": "node --test",
+    "demo": "node src/cli.mjs demo",
+    "merge": "node src/cli.mjs merge",
+    "verify": "node scripts/verify-demo.mjs"
+  },
+  "dependencies": { "exceljs": "4.4.0" },
+  "license": "MIT"
+}
